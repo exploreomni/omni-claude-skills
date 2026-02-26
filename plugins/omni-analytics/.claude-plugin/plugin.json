@@ -6,7 +6,6 @@
     "name": "Omni Analytics",
     "email": "support@omni.co"
   },
-  "homepage": "https://docs.omni.co/api",
-  "repository": "https://github.com/omni-co/omni-claude-skills",
+  "repository": "https://github.com/exploreomni/omni-claude-skills",
   "license": "Apache-2.0"
 }
