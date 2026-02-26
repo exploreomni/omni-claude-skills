@@ -1,0 +1,12 @@
+{
+  "name": "omni-analytics",
+  "version": "1.0.0",
+  "description": "Explore, query, model, and manage Omni Analytics through the REST API. Includes 7 skills for model exploration, querying, model building, content browsing, content building, AI optimization, and administration.",
+  "author": {
+    "name": "Omni Analytics",
+    "email": "support@omni.co"
+  },
+  "homepage": "https://docs.omni.co/api",
+  "repository": "https://github.com/omni-co/omni-claude-skills",
+  "license": "Apache-2.0"
+}
