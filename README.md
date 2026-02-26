@@ -7,14 +7,14 @@ A Claude Code plugin that helps analytics engineers and data teams work with [Om
 ### From Marketplace (recommended)
 
 ```bash
-/plugin marketplace add omni-co/omni-claude-skills
+/plugin marketplace add exploreomni/omni-claude-skills
 /plugin install omni-analytics@omni-analytics
 ```
 
 ### From Git URL
 
 ```bash
-/plugin marketplace add https://github.com/omni-co/omni-claude-skills.git
+/plugin marketplace add https://github.com/exploreomni/omni-claude-skills.git
 /plugin install omni-analytics@omni-analytics
 ```
 
@@ -67,7 +67,7 @@ To make this plugin available to your entire team automatically, add it to your 
     "omni-analytics": {
       "source": {
         "source": "github",
-        "repo": "omni-co/omni-claude-skills"
+        "repo": "exploreomni/omni-claude-skills"
       }
     }
   },
