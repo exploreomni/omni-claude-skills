@@ -79,10 +79,10 @@ When team members trust the repository folder, Claude Code automatically install
 
 ## Documentation
 
-- [Omni REST API Reference](https://docs.omni.co/api)
-- [Omni Modeling Documentation](https://docs.omni.co/modeling)
-- [Omni AI Optimization Guide](https://docs.omni.co/ai/optimize-models)
-- [Omni MCP Server](https://docs.omni.co/ai/mcp) (complementary — this plugin uses the REST API directly)
+- [Omni REST API Reference](https://docs.omni.co/api.md)
+- [Omni Modeling Documentation](https://docs.omni.co/modeling.md)
+- [Omni AI Optimization Guide](https://docs.omni.co/ai/optimize-models.md)
+- [Omni MCP Server](https://docs.omni.co/ai/mcp.md) (complementary — this plugin uses the REST API directly)
 - [Claude Code Plugin Docs](https://code.claude.com/docs/en/plugins)
 
 ## Repository Structure
