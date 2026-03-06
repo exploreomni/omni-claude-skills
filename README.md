@@ -29,19 +29,22 @@ export OMNI_API_KEY="your-api-key"
 
 API keys are created in **Settings > API Keys** (Organization Admin) or **User Profile > Manage Account > Generate Token** (Personal Access Token for Modeler/Connection Admin roles).
 
+> **Token security**: These tokens appear in terminal scrollback when used in shell commands. For team deployments, consider loading tokens from a secrets manager or wrapping API calls in an MCP server. See `omni-admin` for details.
+
 ## Skills
 
-This plugin includes 7 skills that Claude activates automatically based on your request:
+This plugin includes 8 skills that Claude activates automatically based on your request:
 
 | Skill | Description |
 |-------|-------------|
-| **omni-model-explorer** | Discover and inspect models, topics, views, fields, and relationships |
+| **omni-model-explorer** | Discover and inspect models, topics, views, fields, and relationships. Includes field impact analysis. |
 | **omni-model-builder** | Create and edit views, topics, dimensions, measures, and relationships in YAML |
 | **omni-query** | Run queries against Omni's semantic layer and interpret results |
 | **omni-content-explorer** | Find, browse, and organize dashboards, workbooks, and folders |
 | **omni-content-builder** | Create, update, and manage documents and dashboards programmatically — lifecycle, tiles, filters, layouts |
 | **omni-ai-optimizer** | Optimize your Omni model for Blobby (Omni's AI assistant) |
-| **omni-admin** | Manage connections, users, groups, permissions, and schedules |
+| **omni-admin** | Manage connections, users, groups, permissions, schedules, and token security |
+| **omni-embed** | Embed dashboards in external applications — URL signing, custom themes, iframe events |
 
 ## Usage
 
@@ -108,7 +111,9 @@ omni-claude-skills/
 │           │   └── SKILL.md
 │           ├── omni-ai-optimizer/
 │           │   └── SKILL.md
-│           └── omni-admin/
+│           ├── omni-admin/
+│           │   └── SKILL.md
+│           └── omni-embed/
 │               └── SKILL.md
 └── README.md
 ```
