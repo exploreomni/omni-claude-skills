@@ -18,6 +18,8 @@ A Claude Code plugin that helps analytics engineers and data teams work with [Om
 /plugin install omni-analytics@omni-analytics
 ```
 
+> Updating: Update manually from the `/plugin` menu in Claude Code or reinstall to use the latest version.
+
 ## Setup
 
 After installation, set these environment variables:
