@@ -1,6 +1,6 @@
 {
   "name": "omni-analytics",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Explore, query, model, embed, and manage Omni Analytics through the REST API and embed SDK. Includes 8 skills for model exploration, querying, model building, content browsing, content building, embedding, AI optimization, and administration.",
   "author": {
     "name": "Omni Analytics",
