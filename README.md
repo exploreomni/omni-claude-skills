@@ -18,6 +18,15 @@ A Claude Code plugin that helps analytics engineers and data teams work with [Om
 /plugin install omni-analytics@omni-analytics
 ```
 
+### Updating 
+
+Enable plugin auto-updates:                                                                                                                     
+  1. Run /plugin                                                                                                                                                                    
+  2. Go to Marketplaces                                                                                                                                                             
+  3. Select the marketplace → Enable auto-update
+
+Alternatively, update the plugin manually from the /plugin menu or reinstall it to ensure you’re using the latest version.
+
 ## Setup
 
 After installation, set these environment variables:
