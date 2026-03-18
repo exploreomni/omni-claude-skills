@@ -138,8 +138,17 @@ and plugin.
 
 ```text
 omni-claude-skills/
+├── .github/
+│   ├── workflows/
+│   │   └── ci-lint.yml               ← GitHub Actions lint checks
+│   ├── dependabot.yml                ← GitHub Actions update automation
+│   └── PULL_REQUEST_TEMPLATE.md      ← Contributor PR checklist
 ├── .claude-plugin/
 │   └── marketplace.json              ← Marketplace catalog
+├── bin/
+│   ├── validate-skill-frontmatter    ← Validates SKILL.md YAML frontmatter
+│   ├── validate-plugin-metadata      ← Checks marketplace/plugin manifest consistency
+│   └── check-hardcoded-paths         ← Scans plugin files for local absolute paths
 ├── plugins/
 │   └── omni-analytics/
 │       ├── .claude-plugin/
@@ -161,6 +170,9 @@ omni-claude-skills/
 │           │   └── SKILL.md
 │           └── omni-embed/
 │               └── SKILL.md
+├── .pre-commit-config.yaml           ← Local lint and validation hooks
+├── .rumdl.toml                       ← Markdown lint configuration
+├── CLAUDE.md                         ← Contribution standards
 └── README.md
 ```
 
