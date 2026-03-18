@@ -1,17 +1,18 @@
 # Contributing Guidelines
 
-This repository is a Claude Code plugin marketplace. Keep plugin metadata, skill docs, and repository
-documentation consistent so changes remain reviewable and safe to publish.
+This repository is a Claude Code plugin marketplace. Keep plugin metadata, skill docs, and
+repository documentation consistent so changes remain reviewable and safe to publish.
 
 ## Recommended Plugin
 
-Anthropic's `plugin-dev@claude-plugins-official` plugin is useful when editing manifests, skills, hooks,
-and other plugin structure files.
+Anthropic's `plugin-dev@claude-plugins-official` plugin is useful when editing manifests, skills,
+hooks, and other plugin structure files.
 
 ## Skill Requirements
 
 - Store each skill at `plugins/<plugin-name>/skills/<skill-name>/SKILL.md`.
-- Add YAML frontmatter at the top of every `SKILL.md` with non-empty `name` and `description` fields.
+- Add YAML frontmatter at the top of every `SKILL.md` with non-empty `name` and `description`
+  fields.
 - Keep skill directory names and frontmatter `name` values in kebab-case and in sync.
 - Write descriptions that explain when the skill should be used, not just what it is called.
 

@@ -1,3 +1,5 @@
+# Pull Request
+
 ## Summary
 
 Describe the plugin, skill, manifest, or documentation change.
@@ -12,6 +14,7 @@ Describe the plugin, skill, manifest, or documentation change.
 ## Checklist
 
 - [ ] Updated `SKILL.md` frontmatter when adding or renaming skills
-- [ ] Kept `.claude-plugin/marketplace.json` and plugin `.claude-plugin/plugin.json` metadata in sync
+- [ ] Kept `.claude-plugin/marketplace.json` and plugin `.claude-plugin/plugin.json` metadata in
+      sync
 - [ ] Avoided hardcoded local filesystem paths such as `/Users/...` or `/home/...`
 - [ ] Added or updated docs for behavior changes
