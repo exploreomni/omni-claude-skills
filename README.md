@@ -1,6 +1,7 @@
 # Omni Analytics Plugin for Claude Code
 
-A Claude Code plugin that helps analytics engineers and data teams work with [Omni Analytics](https://omni.co) programmatically through Omni's REST APIs.
+A Claude Code plugin that helps analytics engineers and data teams work with
+[Omni Analytics](https://omni.co) programmatically through Omni's REST APIs.
 
 ## Installation
 
@@ -18,14 +19,43 @@ A Claude Code plugin that helps analytics engineers and data teams work with [Om
 /plugin install omni-analytics@omni-analytics
 ```
 
-### Updating 
+### Updating
 
-Enable plugin auto-updates:                                                                                                                     
-  1. Run /plugin                                                                                                                                                                    
-  2. Go to Marketplaces                                                                                                                                                             
-  3. Select the marketplace → Enable auto-update
+Enable plugin auto-updates:
 
-Alternatively, update the plugin manually from the /plugin menu or reinstall it to ensure you’re using the latest version.
+1. Run /plugin
+2. Go to Marketplaces
+3. Select the marketplace → Enable auto-update
+
+Alternatively, update the plugin manually from the /plugin menu or reinstall it to ensure you’re
+using the latest version.
+
+## Recommended Plugins
+
+Anthropic's `plugin-dev@claude-plugins-official` plugin is useful when working on plugin manifests,
+skills, hooks, and marketplace structure in this repository.
+
+## Local Checks Setup
+
+You can run the repository checks locally with either `prek` or `pre-commit`.
+
+### Option 1: prek
+
+```bash
+brew install prek
+prek install
+prek run --all-files
+```
+
+### Option 2: pre-commit
+
+```bash
+python3 -m pip install pre-commit
+pre-commit install
+pre-commit run --all-files
+```
+
+CI uses `prek`, but the repository hook configuration is compatible with both.
 
 ## Setup
 
@@ -36,9 +66,13 @@ export OMNI_BASE_URL="https://yourorg.omniapp.co"
 export OMNI_API_KEY="your-api-key"
 ```
 
-API keys are created in **Settings > API Keys** (Organization Admin) or **User Profile > Manage Account > Generate Token** (Personal Access Token for Modeler/Connection Admin roles).
+API keys are created in **Settings > API Keys** (Organization Admin) or
+**User Profile > Manage Account > Generate Token** (Personal Access Token for Modeler/Connection
+Admin roles).
 
-> **Token security**: These tokens appear in terminal scrollback when used in shell commands. For team deployments, consider loading tokens from a secrets manager or wrapping API calls in an MCP server. See `omni-admin` for details.
+> **Token security**: These tokens appear in terminal scrollback when used in shell commands. For
+> team deployments, consider loading tokens from a secrets manager or wrapping API calls in an MCP
+> server. See `omni-admin` for details.
 
 ## Skills
 
@@ -59,7 +93,7 @@ This plugin includes 8 skills that Claude activates automatically based on your 
 
 Just ask Claude naturally — skills activate automatically:
 
-```
+```text
 "What topics are available in our Omni model?"          → omni-model-explorer
 "Run a query showing revenue by month"                  → omni-query
 "Add a new dimension for customer tier to the users view" → omni-model-builder
@@ -71,7 +105,8 @@ Just ask Claude naturally — skills activate automatically:
 
 ## Team Deployment
 
-To make this plugin available to your entire team automatically, add it to your project's `.claude/settings.json`:
+To make this plugin available to your entire team automatically, add it to your project's
+`.claude/settings.json`:
 
 ```json
 {
@@ -87,19 +122,21 @@ To make this plugin available to your entire team automatically, add it to your 
 }
 ```
 
-When team members trust the repository folder, Claude Code automatically installs the marketplace and plugin.
+When team members trust the repository folder, Claude Code automatically installs the marketplace
+and plugin.
 
 ## Documentation
 
 - [Omni REST API Reference](https://docs.omni.co/api.md)
 - [Omni Modeling Documentation](https://docs.omni.co/modeling.md)
 - [Omni AI Optimization Guide](https://docs.omni.co/ai/optimize-models.md)
-- [Omni MCP Server](https://docs.omni.co/ai/mcp.md) (complementary — this plugin uses the REST API directly)
+- [Omni MCP Server](https://docs.omni.co/ai/mcp.md) (complementary — this plugin uses the REST API
+  directly)
 - [Claude Code Plugin Docs](https://code.claude.com/docs/en/plugins)
 
 ## Repository Structure
 
-```
+```text
 omni-claude-skills/
 ├── .claude-plugin/
 │   └── marketplace.json              ← Marketplace catalog
@@ -129,7 +166,17 @@ omni-claude-skills/
 
 ## Contributing
 
-Contributions welcome! Please open an issue or PR.
+Contributions are welcome.
+
+Before opening a pull request:
+
+1. Review [CLAUDE.md](CLAUDE.md) for repository-specific contribution standards.
+2. Run `bin/validate-skill-frontmatter`.
+3. Run `bin/validate-plugin-metadata`.
+4. Run `bin/check-hardcoded-paths`.
+5. Run `prek run --all-files` or `pre-commit run --all-files`.
+
+Use [.github/PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md) when preparing your PR.
 
 ## License
 
