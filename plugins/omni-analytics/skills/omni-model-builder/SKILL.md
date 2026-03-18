@@ -5,7 +5,8 @@ description: Create and edit Omni Analytics semantic model definitions — views
 
 # Omni Model Builder
 
-Create and modify Omni's semantic model through the YAML API — views, topics, dimensions, measures, relationships, and query views.
+Create and modify Omni's semantic model through the YAML API — views, topics, dimensions, measures,
+relationships, and query views.
 
 > **Tip**: Always use `omni-model-explorer` first to understand the existing model.
 
@@ -27,7 +28,8 @@ curl -L "$OMNI_BASE_URL/openapi.json" \
   -H "Authorization: Bearer $OMNI_API_KEY"
 ```
 
-Use this to verify endpoints, available parameters, and request/response schemas before making calls.
+Use this to verify endpoints, available parameters, and request/response schemas before making
+calls.
 
 ## Safe Development Workflow
 
@@ -48,7 +50,8 @@ curl -L -X POST "$OMNI_BASE_URL/api/v1/models/{modelId}/yaml" \
   }'
 ```
 
-`branchId` is a UUID — retrieve it from the List Models endpoint with `?include=activeBranches`. If the branch doesn't exist yet, Omni creates it.
+`branchId` is a UUID — retrieve it from the List Models endpoint with `?include=activeBranches`. If
+the branch doesn't exist yet, Omni creates it.
 
 ### Step 2: Validate
 
@@ -61,7 +64,8 @@ Returns validation errors and warnings with `message`, `yaml_path`, and sometime
 
 ### Step 3: Merge the Branch
 
-> **Important**: Always ask the user for confirmation before merging. Merging applies changes to the production model and cannot be easily undone.
+> **Important**: Always ask the user for confirmation before merging. Merging applies changes to the
+> production model and cannot be easily undone.
 
 ```bash
 curl -L -X POST "$OMNI_BASE_URL/api/v1/models/{modelId}/branch/{branchName}/merge" \
@@ -103,9 +107,11 @@ measures:
 
 ### Dimension Parameters
 
-See `references/modelParameters.md` for the complete list of 35+ dimension parameters, format values, and timeframes.
+See `references/modelParameters.md` for the complete list of 35+ dimension parameters, format
+values, and timeframes.
 
 Most common parameters:
+
 - `sql` — SQL expression using `${field_name}` references
 - `label` — display name · `description` — help text (also used by Blobby)
 - `primary_key: true` — unique key (critical for aggregations)
@@ -116,7 +122,8 @@ Most common parameters:
 
 ### Measure Parameters
 
-See `references/modelParameters.md` for the complete list of 24+ measure parameters and all 13 aggregate types.
+See `references/modelParameters.md` for the complete list of 24+ measure parameters and all 13
+aggregate types.
 
 Measure filters restrict rows before aggregation:
 
@@ -135,15 +142,20 @@ measures:
         is: California
 ```
 
-Filter conditions: `is`, `is_not`, `greater_than`, `less_than`, `contains`, `starts_with`, `ends_with`
+Filter conditions: `is`, `is_not`, `greater_than`, `less_than`, `contains`, `starts_with`,
+`ends_with`
 
 ## Writing Topics
 
-See [Topics setup](https://docs.omni.co/modeling/topics/setup.md) for complete YAML examples with joins, fields, and ai_context, and [Topic parameters](https://docs.omni.co/modeling/topics/parameters.md) for all available options.
+See [Topics setup](https://docs.omni.co/modeling/topics/setup.md) for complete YAML examples with
+joins, fields, and ai_context, and
+[Topic parameters](https://docs.omni.co/modeling/topics/parameters.md) for all available options.
 
 Key topic elements:
+
 - `base_view` — the primary view for this topic
-- `joins` — nested structure for join chains (e.g., `users: {}` or `inventory_items: { products: {} }`)
+- `joins` — nested structure for join chains (e.g., `users: {}` or
+  `inventory_items: { products: {} }`)
 - `ai_context` — guides Blobby's field mapping (e.g., "Map 'revenue' → total_revenue")
 - `default_filters` — applied to all queries unless removed
 - `always_where_sql` — non-removable filters
@@ -210,7 +222,14 @@ sql: |
 
 ## Docs Reference
 
-- [Model YAML API](https://docs.omni.co/api/models.md) · [Views](https://docs.omni.co/modeling/views.md) · [Topics](https://docs.omni.co/modeling/topics/parameters.md) · [Dimensions](https://docs.omni.co/modeling/dimensions.md) · [Measures](https://docs.omni.co/modeling/measures.md) · [Relationships](https://docs.omni.co/modeling/relationships.md) · [Query Views](https://docs.omni.co/modeling/query-views.md) · [Branch Mode](https://docs.omni.co/finding-content/drafting-publishing/branch-mode.md)
+- [Model YAML API](https://docs.omni.co/api/models.md) ·
+  [Views](https://docs.omni.co/modeling/views.md) ·
+  [Topics](https://docs.omni.co/modeling/topics/parameters.md) ·
+  [Dimensions](https://docs.omni.co/modeling/dimensions.md) ·
+  [Measures](https://docs.omni.co/modeling/measures.md) ·
+  [Relationships](https://docs.omni.co/modeling/relationships.md) ·
+  [Query Views](https://docs.omni.co/modeling/query-views.md) ·
+  [Branch Mode](https://docs.omni.co/finding-content/drafting-publishing/branch-mode.md)
 
 ## Related Skills
 

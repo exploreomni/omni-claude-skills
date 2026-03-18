@@ -5,16 +5,23 @@ description: Create, update, and manage Omni Analytics documents and dashboards 
 
 # Omni Content Builder
 
-Create, update, and manage Omni documents and dashboards programmatically via the REST API — document lifecycle, workbook models, filters, and dashboard content.
+Create, update, and manage Omni documents and dashboards programmatically via the REST API —
+document lifecycle, workbook models, filters, and dashboard content.
 
-> **Tip**: Use `omni-model-explorer` to understand available fields and `omni-content-explorer` to find existing dashboards to modify or learn from.
+> **Tip**: Use `omni-model-explorer` to understand available fields and `omni-content-explorer` to
+> find existing dashboards to modify or learn from.
 
 ## Known Issues & Safe Defaults
 
-- **Chart rendering**: Complex chart types may show "No chart available" in the Omni UI if `config`, `visType`, or `prefersChart` are misconfigured. Default to `chartType: "table"` for reliable rendering, and configure chart visualizations in the Omni UI.
-- **Every query must include at least one measure** — a query with only dimensions produces empty/nonsense tiles (e.g., just months with no data).
-- **Use `identifier` not `id`** for all document API calls — `.id` is null for workbook-type documents and will silently fail.
-- **Boolean filters may be silently dropped** when a `pivots` array is present (reported Omni bug). If boolean filters aren't applying, remove the pivot and test again.
+- **Chart rendering**: Complex chart types may show "No chart available" in the Omni UI if `config`,
+  `visType`, or `prefersChart` are misconfigured. Default to `chartType: "table"` for reliable
+  rendering, and configure chart visualizations in the Omni UI.
+- **Every query must include at least one measure** — a query with only dimensions produces
+  empty/nonsense tiles (e.g., just months with no data).
+- **Use `identifier` not `id`** for all document API calls — `.id` is null for workbook-type
+  documents and will silently fail.
+- **Boolean filters may be silently dropped** when a `pivots` array is present (reported Omni bug).
+  If boolean filters aren't applying, remove the pivot and test again.
 
 ## Prerequisites
 
@@ -32,16 +39,19 @@ curl -L "$OMNI_BASE_URL/openapi.json" \
   -H "Authorization: Bearer $OMNI_API_KEY"
 ```
 
-Use this to verify endpoints, available parameters, and request/response schemas before making calls.
+Use this to verify endpoints, available parameters, and request/response schemas before making
+calls.
 
 ## Dashboard Architecture
 
 Omni dashboards are built from **documents** (workbooks). Each has:
+
 - A **dashboard view** (the published, shareable layout)
 - One or more **query tabs** (underlying queries)
 - A **workbook model** (per-dashboard model customizations)
 
-Documents can be created with full query and visualization configurations via `queryPresentations`. Fine-tuning tile layout is best done in the Omni UI.
+Documents can be created with full query and visualization configurations via `queryPresentations`.
+Fine-tuning tile layout is best done in the Omni UI.
 
 ## Document Management
 
@@ -61,9 +71,12 @@ Returns the new document's `identifier`, `workbookId`, and `dashboardId`.
 
 ### Create Document with Queries and Visualizations
 
-Use `queryPresentations` to create a document pre-populated with query tabs and visualization configurations.
+Use `queryPresentations` to create a document pre-populated with query tabs and visualization
+configurations.
 
-> **Doc gap**: The [create-document API docs](https://docs.omni.co/api/documents/create-document.md) mention queryPresentations but don't show the complete structure. This section documents the full format.
+> **Doc gap**: The [create-document API docs](https://docs.omni.co/api/documents/create-document.md)
+> mention queryPresentations but don't show the complete structure. This section documents the full
+> format.
 
 ```bash
 curl -L -X POST "$OMNI_BASE_URL/api/v1/documents" \
@@ -203,7 +216,8 @@ curl -L -X POST "$OMNI_BASE_URL/api/v1/documents" \
 
 #### Query Object Reference
 
-The `query` object within each query presentation uses the same structure as the [Query API](https://docs.omni.co/api/queries.md):
+The `query` object within each query presentation uses the same structure as the
+[Query API](https://docs.omni.co/api/queries.md):
 
 | Parameter | Required | Description |
 |-----------|----------|-------------|
@@ -215,13 +229,17 @@ The `query` object within each query presentation uses the same structure as the
 | `join_paths_from_topic_name` | Recommended | Topic name for join resolution — set this alongside `topicName` on the parent queryPresentation. |
 | `pivots` | No | Array of field names to pivot on |
 
-> **Note**: `modelId` is not needed inside the query object — it's inherited from the document's top-level `modelId`.
+> **Note**: `modelId` is not needed inside the query object — it's inherited from the document's
+> top-level `modelId`.
 
 #### visConfig Object
 
-`visConfig` belongs **inside the `query` object** — not at the `queryPresentation` level. When passed as a sibling of `query`, it is silently dropped by the API.
+`visConfig` belongs **inside the `query` object** — not at the `queryPresentation` level. When
+passed as a sibling of `query`, it is silently dropped by the API.
 
-`visConfig` alone does **not** control chart rendering. It stores the chart type hint on the query, but the actual rendering is driven by `prefersChart`, `visType`, and `config` at the `queryPresentation` level.
+`visConfig` alone does **not** control chart rendering. It stores the chart type hint on the query,
+but the actual rendering is driven by `prefersChart`, `visType`, and `config` at the
+`queryPresentation` level.
 
 **chartType values**:
 
@@ -240,43 +258,62 @@ The `query` object within each query presentation uses the same structure as the
 
 #### config Object
 
-The `config` object at the `queryPresentation` level defines the actual chart rendering. Its structure varies by chart type — see [references/queryPresentations.md](references/queryPresentations.md) for complete config examples by chart type.
+The `config` object at the `queryPresentation` level defines the actual chart rendering. Its
+structure varies by chart type — see
+[references/queryPresentations.md](references/queryPresentations.md) for complete config examples by
+chart type.
 
-The most reliable way to get the correct `config` for a given chart type is to **build the chart in the Omni UI and read it back** via `GET /api/v1/documents/{documentId}`.
+The most reliable way to get the correct `config` for a given chart type is to
+**build the chart in the Omni UI and read it back** via `GET /api/v1/documents/{documentId}`.
 
 ### Discovering the Full queryPresentation Structure from Existing Dashboards
 
-The most reliable way to learn `config`, `visType`, and field names is to read an existing dashboard document:
+The most reliable way to learn `config`, `visType`, and field names is to read an existing dashboard
+document:
 
-**Step 1: Find a reference dashboard**
+#### Step 1: Find a Reference Dashboard
 
 ```bash
 curl -L "$OMNI_BASE_URL/api/v1/documents" \
   -H "Authorization: Bearer $OMNI_API_KEY"
 ```
 
-**Step 2: Get its full document**
+#### Step 2: Get Its Full Document
 
 ```bash
 curl -L "$OMNI_BASE_URL/api/v1/documents/{documentId}" \
   -H "Authorization: Bearer $OMNI_API_KEY"
 ```
 
-Returns the complete `queryPresentations` array including `topicName`, `visConfig`, `config`, and the full `query` object for each tile — use this as the source of truth when recreating or templating dashboards.
+Returns the complete `queryPresentations` array including `topicName`, `visConfig`, `config`, and
+the full `query` object for each tile — use this as the source of truth when recreating or
+templating dashboards.
 
-> **Tip**: Build a reference dashboard in the Omni UI with the chart types and styling you want, then read it via `GET /api/v1/documents/{documentId}` to capture the exact `queryPresentations` structure to use as a template.
+> **Tip**: Build a reference dashboard in the Omni UI with the chart types and styling you want,
+> then read it via `GET /api/v1/documents/{documentId}` to capture the exact `queryPresentations`
+> structure to use as a template.
 
 #### Caveats When Copying queryPresentations from Existing Dashboards
 
-- **Strip `model_extension_id`** from each query object — these reference model extensions scoped to the source document and will cause "Chart unavailable" errors in new documents.
-- **Filter to the tiles you want** — `GET /api/v1/documents/{id}` returns all queries including workbook-only tabs not shown on the dashboard. Only pass the `queryPresentations` you want as visible tiles.
-- **Queries without `topicName` are valid** — SQL-mode and tab-selector queries won't have a `topicName`. Do not add one.
+- **Strip `model_extension_id`** from each query object — these reference model extensions scoped to
+  the source document and will cause "Chart unavailable" errors in new documents.
+- **Filter to the tiles you want** — `GET /api/v1/documents/{id}` returns all queries including
+  workbook-only tabs not shown on the dashboard. Only pass the `queryPresentations` you want as
+  visible tiles.
+- **Queries without `topicName` are valid** — SQL-mode and tab-selector queries won't have a
+  `topicName`. Do not add one.
 
 #### Caveats when using queryPresentations from an existing document
 
-- **Filter to the tiles you want**: `get-dashboard-document` returns all queries including workbook-only tabs not shown on the dashboard. Pass only the `queryPresentations` you want as visible tiles — every entry you include will become a visible tile in the new document.
-- **Strip `model_extension_id`**: Some queries contain a `model_extension_id` that references a model extension scoped to the source document. These IDs are not valid in a new document and will cause "Chart unavailable" errors. Remove `model_extension_id` from each query object before posting.
-- **Queries without a topic are expected**: SQL-mode queries and tab-selector queries (`visType: "spreadsheet-tab"`) will not have a `topicName` — this is correct, do not add one.
+- **Filter to the tiles you want**: `get-dashboard-document` returns all queries including
+  workbook-only tabs not shown on the dashboard. Pass only the `queryPresentations` you want as
+  visible tiles — every entry you include will become a visible tile in the new document.
+- **Strip `model_extension_id`**: Some queries contain a `model_extension_id` that references a
+  model extension scoped to the source document. These IDs are not valid in a new document and will
+  cause "Chart unavailable" errors. Remove `model_extension_id` from each query object before
+  posting.
+- **Queries without a topic are expected**: SQL-mode queries and tab-selector queries
+  (`visType: "spreadsheet-tab"`) will not have a `topicName` — this is correct, do not add one.
 
 ### Rename Document
 
@@ -290,7 +327,8 @@ curl -L -X PATCH "$OMNI_BASE_URL/api/v1/documents/{documentId}" \
   }'
 ```
 
-Set `clearExistingDraft: true` if the document has an existing draft, otherwise the API returns 409 Conflict.
+Set `clearExistingDraft: true` if the document has an existing draft, otherwise the API returns 409
+Conflict.
 
 ### Delete Document
 
@@ -313,7 +351,8 @@ curl -L -X PUT "$OMNI_BASE_URL/api/v1/documents/{documentId}/move" \
   }'
 ```
 
-Use `"folderPath": null` to move to root. `scope` is optional — auto-computed from the destination folder.
+Use `"folderPath": null` to move to root. `scope` is optional — auto-computed from the destination
+folder.
 
 ### Duplicate Document
 
@@ -331,7 +370,8 @@ Only published documents can be duplicated. Draft documents return 404.
 
 ## Updating a Dashboard's Model
 
-Push custom dimensions and measures to a specific dashboard by writing to its workbook model. This is a two-step flow:
+Push custom dimensions and measures to a specific dashboard by writing to its workbook model. This
+is a two-step flow:
 
 **Step 1 — get the document to find its `workbook_id`:**
 
@@ -353,7 +393,9 @@ curl -L -X POST "$OMNI_BASE_URL/api/unstable/models/{workbookId}/yaml" \
   }'
 ```
 
-`fileName` must be `"model"`, `"relationships"`, or end with `.view` or `.topic`. The `yaml` value is a YAML string (not a JSON object). Writing to a workbook model skips git sync entirely — authorization is still checked against the underlying shared model's permissions.
+`fileName` must be `"model"`, `"relationships"`, or end with `.view` or `.topic`. The `yaml` value
+is a YAML string (not a JSON object). Writing to a workbook model skips git sync entirely —
+authorization is still checked against the underlying shared model's permissions.
 
 ## Dashboard Filters
 
@@ -366,9 +408,13 @@ curl -L "$OMNI_BASE_URL/api/v1/dashboards/{dashboardId}/filters" \
 
 ### Update Filters
 
-> **Warning**: `PUT` and `PATCH` on `/dashboards/{id}/filters` have been reported to return 405 or 500 in some configurations. If filter updates fail, include filters during document creation instead (see below).
+> **Warning**: `PUT` and `PATCH` on `/dashboards/{id}/filters` have been reported to return 405 or
+> 500 in some configurations. If filter updates fail, include filters during document creation
+> instead (see below).
 
-The most reliable way to create dashboard filters is to include `filterConfig` and `filterOrder` in the initial `POST /api/v1/documents` call. See [references/filterConfig.md](references/filterConfig.md) for complete examples of each filter type.
+The most reliable way to create dashboard filters is to include `filterConfig` and `filterOrder` in
+the initial `POST /api/v1/documents` call. See
+[references/filterConfig.md](references/filterConfig.md) for complete examples of each filter type.
 
 ```bash
 curl -L -X POST "$OMNI_BASE_URL/api/v1/documents" \
@@ -399,7 +445,9 @@ curl -L -X POST "$OMNI_BASE_URL/api/v1/documents" \
   }'
 ```
 
-The keys in `filterConfig` (e.g., `"date_filter"`) are arbitrary IDs — they must match the entries in `filterOrder`. To learn the exact filter structure, read filters from an existing dashboard with `GET /api/v1/dashboards/{dashboardId}/filters`.
+The keys in `filterConfig` (e.g., `"date_filter"`) are arbitrary IDs — they must match the entries
+in `filterOrder`. To learn the exact filter structure, read filters from an existing dashboard with
+`GET /api/v1/dashboards/{dashboardId}/filters`.
 
 ### Filter Types
 
@@ -417,12 +465,13 @@ The keys in `filterConfig` (e.g., `"date_filter"`) are arbitrary IDs — they mu
 
 After creating or finding content, always provide the user a direct link:
 
-```
+```text
 Dashboard: {OMNI_BASE_URL}/dashboards/{identifier}
 Workbook:  {OMNI_BASE_URL}/w/{identifier}
 ```
 
-The `identifier` comes from the document's `identifier` field in API responses (not `id`, which is null for workbooks).
+The `identifier` comes from the document's `identifier` field in API responses (not `id`, which is
+null for workbooks).
 
 ## Recommended Build Workflows
 
@@ -431,14 +480,17 @@ The `identifier` comes from the document's `identifier` field in API responses (
 Aim for minimal API calls. Batch everything into the document creation POST.
 
 1. **Discover fields** — use `omni-model-explorer` to find topic + fields (1-2 calls)
-2. **Optionally read a reference dashboard** — `GET /api/v1/documents/{id}` to capture `queryPresentations` patterns (1 call)
-3. **Create document** — single `POST /api/v1/documents` with `queryPresentations` + `filterConfig` + `filterOrder` all in one call
+2. **Optionally read a reference dashboard** — `GET /api/v1/documents/{id}` to capture
+   `queryPresentations` patterns (1 call)
+3. **Create document** — single `POST /api/v1/documents` with `queryPresentations` + `filterConfig`
+   - `filterOrder` all in one call
 4. **Share the link** — return `{OMNI_BASE_URL}/dashboards/{identifier}` to the user
 5. **Refine in UI** — tile layout, chart styling, and advanced config are best done in the Omni UI
 
 ### UI-First (Hybrid Approach)
 
-1. **Prepare the Model** — use `omni-model-builder` for shared fields, or `update-model` for dashboard-specific fields
+1. **Prepare the Model** — use `omni-model-builder` for shared fields, or `update-model` for
+   dashboard-specific fields
 2. **Build in UI** — add tiles, choose viz types, arrange the grid, set filters
 3. **Iterate via API** — update model fields, extract queries for reuse
 
@@ -458,7 +510,12 @@ curl -L "$OMNI_BASE_URL/api/v1/dashboards/{dashboardId}/download/{jobId}/status"
 
 ## Docs Reference
 
-- [Documents API](https://docs.omni.co/api/documents.md) · [Dashboard Filters](https://docs.omni.co/api/dashboard-filters.md) · [Dashboard Downloads](https://docs.omni.co/api/dashboard-downloads.md) · [Query API](https://docs.omni.co/api/queries.md) · [Schedules API](https://docs.omni.co/api/schedules.md) · [Visualization Types](https://docs.omni.co/visualize-present/visualizations.md)
+- [Documents API](https://docs.omni.co/api/documents.md) ·
+  [Dashboard Filters](https://docs.omni.co/api/dashboard-filters.md) ·
+  [Dashboard Downloads](https://docs.omni.co/api/dashboard-downloads.md) ·
+  [Query API](https://docs.omni.co/api/queries.md) ·
+  [Schedules API](https://docs.omni.co/api/schedules.md) ·
+  [Visualization Types](https://docs.omni.co/visualize-present/visualizations.md)
 
 ## Related Skills
 

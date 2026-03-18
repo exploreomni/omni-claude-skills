@@ -1,8 +1,10 @@
 # Filter Expressions Reference
 
-Complete reference for filter expression syntax used in the `filters` object of Omni query API calls.
+Complete reference for filter expression syntax used in the `filters` object of Omni query API
+calls.
 
-Filters are passed as key-value pairs where the key is a fully qualified field name and the value is an expression string:
+Filters are passed as key-value pairs where the key is a fully qualified field name and the value is
+an expression string:
 
 ```json
 "filters": {
@@ -161,7 +163,8 @@ Multiple filters in the same object are AND-combined:
 }
 ```
 
-This means: created in last 90 days AND status is complete AND sale price > 50 AND state is California or New York.
+This means: created in last 90 days AND status is complete AND sale price > 50 AND state is
+California or New York.
 
 ## Complete Query Example with Filters
 

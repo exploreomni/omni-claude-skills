@@ -5,7 +5,8 @@ description: Administer an Omni Analytics instance — manage connections, users
 
 # Omni Admin
 
-Manage your Omni instance — connections, users, groups, user attributes, permissions, schedules, and schema refreshes.
+Manage your Omni instance — connections, users, groups, user attributes, permissions, schedules, and
+schema refreshes.
 
 > **Tip**: Most admin endpoints require an **Organization API Key** (not a Personal Access Token).
 
@@ -25,7 +26,8 @@ curl -L "$OMNI_BASE_URL/openapi.json" \
   -H "Authorization: Bearer $OMNI_API_KEY"
 ```
 
-Use this to verify endpoints, available parameters, and request/response schemas before making calls.
+Use this to verify endpoints, available parameters, and request/response schemas before making
+calls.
 
 ## Connections
 
@@ -246,7 +248,16 @@ curl -L "$OMNI_BASE_URL/api/v1/models/{modelId}/git" \
 
 ## Docs Reference
 
-- [Connections](https://docs.omni.co/api/connections.md) · [Users (SCIM)](https://docs.omni.co/api/users.md) · [Groups (SCIM)](https://docs.omni.co/api/user-groups.md) · [User Attributes](https://docs.omni.co/api/user-attributes.md) · [Document Permissions](https://docs.omni.co/api/document-permissions.md) · [Folder Permissions](https://docs.omni.co/api/folder-permissions.md) · [Schedules](https://docs.omni.co/api/schedules.md) · [Schedule Recipients](https://docs.omni.co/api/schedule-recipients.md) · [Content Validator](https://docs.omni.co/api/content-validator.md) · [API Authentication](https://docs.omni.co/api/authentication.md)
+- [Connections](https://docs.omni.co/api/connections.md) ·
+  [Users (SCIM)](https://docs.omni.co/api/users.md) ·
+  [Groups (SCIM)](https://docs.omni.co/api/user-groups.md) ·
+  [User Attributes](https://docs.omni.co/api/user-attributes.md) ·
+  [Document Permissions](https://docs.omni.co/api/document-permissions.md) ·
+  [Folder Permissions](https://docs.omni.co/api/folder-permissions.md) ·
+  [Schedules](https://docs.omni.co/api/schedules.md) ·
+  [Schedule Recipients](https://docs.omni.co/api/schedule-recipients.md) ·
+  [Content Validator](https://docs.omni.co/api/content-validator.md) ·
+  [API Authentication](https://docs.omni.co/api/authentication.md)
 
 ## Related Skills
 

@@ -1,6 +1,7 @@
 # Model Parameters Reference
 
-Complete parameter reference for views, topics, dimensions, and measures. Use these when building or modifying Omni semantic model YAML.
+Complete parameter reference for views, topics, dimensions, and measures. Use these when building or
+modifying Omni semantic model YAML.
 
 ## Dimension Parameters
 

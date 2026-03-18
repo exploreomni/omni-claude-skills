@@ -5,9 +5,12 @@ description: Embed Omni Analytics dashboards in external applications — URL si
 
 # Omni Embed
 
-Embed Omni dashboards in external applications using signed iframe URLs. The `@omni-co/embed` SDK handles URL signing and theme customization. Omni's postMessage events enable two-way communication between the parent app and embedded iframe.
+Embed Omni dashboards in external applications using signed iframe URLs. The `@omni-co/embed` SDK
+handles URL signing and theme customization. Omni's postMessage events enable two-way communication
+between the parent app and embedded iframe.
 
-> **Tip**: Use `omni-content-explorer` to find dashboards to embed, and `omni-admin` to manage embed user permissions and user attributes for row-level security.
+> **Tip**: Use `omni-content-explorer` to find dashboards to embed, and `omni-admin` to manage embed
+> user permissions and user attributes for row-level security.
 
 ## Prerequisites
 
@@ -21,7 +24,8 @@ export OMNI_EMBED_SECRET="your-embed-secret"               # Admin → Embed
 export OMNI_API_KEY="your-api-key"                         # For user/content API calls
 ```
 
-The embed secret is found in **Admin → Embed** in your Omni instance. The `OMNI_BASE_URL` for embedding uses the `.embed-omniapp.co` domain, not the standard `.omniapp.co` domain.
+The embed secret is found in **Admin → Embed** in your Omni instance. The `OMNI_BASE_URL` for
+embedding uses the `.embed-omniapp.co` domain, not the standard `.omniapp.co` domain.
 
 ## API Discovery
 
@@ -32,11 +36,13 @@ curl -L "$OMNI_BASE_URL/openapi.json" \
   -H "Authorization: Bearer $OMNI_API_KEY"
 ```
 
-Use this to verify endpoints, available parameters, and request/response schemas before making calls.
+Use this to verify endpoints, available parameters, and request/response schemas before making
+calls.
 
 ## Signing Embed URLs
 
-Use `embedSsoDashboard()` from the `@omni-co/embed` SDK to generate a signed URL server-side, then load it in an iframe client-side.
+Use `embedSsoDashboard()` from the `@omni-co/embed` SDK to generate a signed URL server-side, then
+load it in an iframe client-side.
 
 ```typescript
 import { embedSsoDashboard, EmbedSessionMode } from "@omni-co/embed";
@@ -68,11 +74,14 @@ const embedUrl = await embedSsoDashboard({
 | `customTheme` | No | Theme object (see Custom Themes below) |
 | `entity` | No | Entity name for workspaces (see Entity Workspaces below) |
 
-**Gotcha**: The `host` parameter must be a bare hostname (e.g., `yourorg.embed-omniapp.co`). Including a protocol (`https://`) or port (`:3000`) causes Omni to return 400.
+**Gotcha**: The `host` parameter must be a bare hostname (e.g., `yourorg.embed-omniapp.co`).
+Including a protocol (`https://`) or port (`:3000`) causes Omni to return 400.
 
 ## Custom Themes
 
-Pass a `customTheme` object to `embedSsoDashboard()` to style the embedded dashboard content (tile backgrounds, text colors, controls, buttons). This controls what's **inside** the iframe — parent app styling is separate.
+Pass a `customTheme` object to `embedSsoDashboard()` to style the embedded dashboard content (tile
+backgrounds, text colors, controls, buttons). This controls what's **inside** the iframe — parent
+app styling is separate.
 
 ```typescript
 const embedUrl = await embedSsoDashboard({
@@ -169,7 +178,8 @@ const embedUrl = await embedSsoDashboard({
 - Box shadows with rgba: `"0 2px 8px rgba(230, 0, 0, 0.1)"`
 - Custom fonts via URL: `"url(https://fonts.gstatic.com/...) format('woff2')"`
 - Empty strings to clear defaults: `""`
-- `linear-gradient()` and `rgba()` for backgrounds work in Omni's UI theme editor but may fail when passed via the SDK — use solid hex colors for reliability
+- `linear-gradient()` and `rgba()` for backgrounds work in Omni's UI theme editor but may fail when
+  passed via the SDK — use solid hex colors for reliability
 
 ### Theming Tips
 
@@ -238,7 +248,8 @@ window.addEventListener("message", (event) => {
 }
 ```
 
-**`dashboard:tile-drill`** — Fired when a user drills on any dashboard tile (charts, tables, maps). No Omni-side configuration required.
+**`dashboard:tile-drill`** — Fired when a user drills on any dashboard tile (charts, tables, maps).
+No Omni-side configuration required.
 
 ```json
 {
@@ -278,9 +289,12 @@ window.addEventListener("message", (event) => {
 }
 ```
 
-Use `drill.rowToDrill` for the data from the drilled row. Use `asJsonUrlSearchParam` from `tile.appliedFilters` or `dashboard.filters` to sign and embed a different dashboard with those filters applied.
+Use `drill.rowToDrill` for the data from the drilled row. Use `asJsonUrlSearchParam` from
+`tile.appliedFilters` or `dashboard.filters` to sign and embed a different dashboard with those
+filters applied.
 
-**`page:changed`** — Fired when the URL changes inside the iframe (including after saving a new dashboard).
+**`page:changed`** — Fired when the URL changes inside the iframe (including after saving a new
+dashboard).
 
 ```json
 {
@@ -293,7 +307,9 @@ Use `drill.rowToDrill` for the data from the drilled row. Use `asJsonUrlSearchPa
 }
 ```
 
-**Custom visualization events** — Fired when a user clicks a configured table row or markdown link. Requires setup in Omni: set the table column's Display to **Link** → **Embed event** and enter an event name. For markdown, use `<omni-message>` tags.
+**Custom visualization events** — Fired when a user clicks a configured table row or markdown link.
+Requires setup in Omni: set the table column's Display to **Link** → **Embed event** and enter an
+event name. For markdown, use `<omni-message>` tags.
 
 ```json
 {
@@ -308,6 +324,7 @@ Use `drill.rowToDrill` for the data from the drilled row. Use `asJsonUrlSearchPa
 Table setup: field dropdown → Display tab → Display as: Link → URL: Embed event → enter event name.
 
 Markdown setup:
+
 ```html
 <omni-message event-name="product-click" event-data="{{products.name.raw}},{{products.retail_price.raw}}">
   Click here
@@ -316,7 +333,8 @@ Markdown setup:
 
 ### Sending Events to the Iframe
 
-**`dashboard:filter-change-by-url-parameter`** — Push a filter from the parent app into the embedded dashboard.
+**`dashboard:filter-change-by-url-parameter`** — Push a filter from the parent app into the embedded
+dashboard.
 
 ```javascript
 iframe.contentWindow.postMessage({
@@ -328,7 +346,8 @@ iframe.contentWindow.postMessage({
 }, iframeOrigin);
 ```
 
-Get the `filterUrlParameter` string by opening the dashboard in Omni, changing filter values, and copying the `f--` parameter from the URL.
+Get the `filterUrlParameter` string by opening the dashboard in Omni, changing filter values, and
+copying the `f--` parameter from the URL.
 
 ## Entity Workspaces
 
@@ -367,7 +386,9 @@ const embedUrl = await embedSsoDashboard({
 
 ## Embed Users and Permissions
 
-When building permission-aware experiences (e.g., a sidebar that only shows dashboards a user can access), use these REST API calls. Note: API calls use the `.omniapp.co` domain, not the `.embed-omniapp.co` embed domain.
+When building permission-aware experiences (e.g., a sidebar that only shows dashboards a user can
+access), use these REST API calls. Note: API calls use the `.omniapp.co` domain, not the
+`.embed-omniapp.co` embed domain.
 
 ### Look Up an Embed User
 
@@ -376,7 +397,8 @@ curl -L "$OMNI_API_BASE/api/scim/v2/embed/users?filter=embedExternalId%20eq%20%2
   -H "Authorization: Bearer $OMNI_API_KEY"
 ```
 
-Returns the Omni user ID for the given `externalId`. If no user is found, the user hasn't accessed any embedded dashboards yet.
+Returns the Omni user ID for the given `externalId`. If no user is found, the user hasn't accessed
+any embedded dashboards yet.
 
 ### List Documents by User Permission
 
@@ -410,11 +432,13 @@ Response uses `records` array (not `documents`):
 }
 ```
 
-Use `identifier` as the `contentId` for embed signing. Filter for `hasDashboard: true` to get embeddable dashboards only.
+Use `identifier` as the `contentId` for embed signing. Filter for `hasDashboard: true` to get
+embeddable dashboards only.
 
 ### List Folders for Friendly Names
 
-Entity folders have technical paths like `omni-system-sso-embed-entity-folder-poc`. Map paths to display names:
+Entity folders have technical paths like `omni-system-sso-embed-entity-folder-poc`. Map paths to
+display names:
 
 ```bash
 curl -L "$OMNI_API_BASE/api/v1/folders" \
@@ -427,16 +451,22 @@ Build a `path → name` mapping from the response to display user-friendly folde
 
 The embed domain (`.embed-omniapp.co`) and API domain (`.omniapp.co`) are different:
 
-```
+```text
 Embed: yourorg.embed-omniapp.co  →  used for iframe URLs
 API:   yourorg.omniapp.co        →  used for REST API calls
 ```
 
-When your app stores the embed domain, convert it for API calls by replacing `.embed-omniapp.co` with `.omniapp.co`.
+When your app stores the embed domain, convert it for API calls by replacing `.embed-omniapp.co`
+with `.omniapp.co`.
 
 ## Docs Reference
 
-- [Embed Overview](https://docs.omni.co/embed.md) · [Custom Themes](https://docs.omni.co/embed/customization/themes.md) · [Embed Events](https://docs.omni.co/embed/events.md) · [AI Chat in Embeds](https://docs.omni.co/embed/customization/ai-chat.md) · [Embed Users API](https://docs.omni.co/api/users/list-embed-users.md) · [Documents API](https://docs.omni.co/api/documents.md)
+- [Embed Overview](https://docs.omni.co/embed.md) ·
+  [Custom Themes](https://docs.omni.co/embed/customization/themes.md) ·
+  [Embed Events](https://docs.omni.co/embed/events.md) ·
+  [AI Chat in Embeds](https://docs.omni.co/embed/customization/ai-chat.md) ·
+  [Embed Users API](https://docs.omni.co/api/users/list-embed-users.md) ·
+  [Documents API](https://docs.omni.co/api/documents.md)
 
 ## Related Skills
 

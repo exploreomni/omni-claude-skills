@@ -5,7 +5,8 @@ description: Optimize your Omni Analytics model for Blobby, Omni's AI assistant 
 
 # Omni AI Optimizer
 
-Optimize your Omni semantic model so Blobby (Omni's AI assistant) returns accurate, contextual answers.
+Optimize your Omni semantic model so Blobby (Omni's AI assistant) returns accurate, contextual
+answers.
 
 > **Tip**: Use `omni-model-explorer` to inspect current AI context before making changes.
 
@@ -27,7 +28,8 @@ curl -L "$OMNI_BASE_URL/openapi.json" \
   -H "Authorization: Bearer $OMNI_API_KEY"
 ```
 
-Use this to verify endpoints, available parameters, and request/response schemas before making calls.
+Use this to verify endpoints, available parameters, and request/response schemas before making
+calls.
 
 ## How Blobby Works
 
@@ -120,7 +122,8 @@ Same operators as topic `fields`: wildcard (`*`), negation (`-`), tags (`tag:`).
 
 ## Adding sample_queries
 
-Teach Blobby by example. Build the correct query in a workbook, retrieve its structure, then add to the topic YAML:
+Teach Blobby by example. Build the correct query in a workbook, retrieve its structure, then add to
+the topic YAML:
 
 ```yaml
 sample_queries:
@@ -139,11 +142,16 @@ sample_queries:
           desc: true
 ```
 
-> **Note**: When exporting queries from Omni's workbook, you'll get JSON with `table`, `join_paths_from_topic_name`, and `sorts` using `column_name`/`sort_descending`. Map these to YAML as follows:
+> **Note**: When exporting queries from Omni's workbook, you'll get JSON with `table`,
+> `join_paths_from_topic_name`, and `sorts` using `column_name`/`sort_descending`. Map these to YAML
+> as follows:
+>
 > - `table` → `base_view`
 > - `join_paths_from_topic_name` → `topic`
 > - `column_name` → `field`, `sort_descending` → `desc`
-> - Workbook JSON includes `filters`, `pivots`, `limit`, `column_limit` which you can include in YAML (though filter syntax requires consulting the [Model YAML API docs](https://docs.omni.co/api/models.md) directly)
+> - Workbook JSON includes `filters`, `pivots`, `limit`, and `column_limit`, which you can include
+>   in YAML. Filter syntax still requires consulting the
+>   [Model YAML API docs](https://docs.omni.co/api/models.md) directly.
 
 Focus on questions users actually ask — check Analytics > AI usage in Omni.
 
@@ -199,7 +207,8 @@ Good descriptions help both Blobby and human analysts.
 
 ## Adding synonyms
 
-Map alternative names, abbreviations, and domain-specific terminology so Blobby matches user queries to the correct field. Works on both dimensions and measures.
+Map alternative names, abbreviations, and domain-specific terminology so Blobby matches user queries
+to the correct field. Works on both dimensions and measures.
 
 ```yaml
 dimensions:
@@ -215,7 +224,8 @@ measures:
     synonyms: [AOV, avg order, basket size]
 ```
 
-**Synonyms vs ai_context**: Use `synonyms` for field-level name mapping. Use `ai_context` for topic-level behavioral guidance, data nuances, and multi-field relationships.
+**Synonyms vs ai_context**: Use `synonyms` for field-level name mapping. Use `ai_context` for
+topic-level behavioral guidance, data nuances, and multi-field relationships.
 
 ## Optimization Checklist
 
@@ -231,7 +241,11 @@ measures:
 
 ## Docs Reference
 
-- [Optimizing Models for AI](https://docs.omni.co/ai/optimize-models.md) · [Synonyms](https://docs.omni.co/modeling/dimensions/parameters/synonyms) · [Topic Parameters](https://docs.omni.co/modeling/topics/parameters.md) · [Model YAML API](https://docs.omni.co/api/models.md) · [Omni AI Overview](https://docs.omni.co/ai.md)
+- [Optimizing Models for AI](https://docs.omni.co/ai/optimize-models.md) ·
+  [Synonyms](https://docs.omni.co/modeling/dimensions/parameters/synonyms) ·
+  [Topic Parameters](https://docs.omni.co/modeling/topics/parameters.md) ·
+  [Model YAML API](https://docs.omni.co/api/models.md) ·
+  [Omni AI Overview](https://docs.omni.co/ai.md)
 
 ## Related Skills
 

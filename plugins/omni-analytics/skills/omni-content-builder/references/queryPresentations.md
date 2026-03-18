@@ -1,8 +1,11 @@
 # queryPresentations Reference
 
-Complete config examples for each chart type. Use these as templates when creating documents with `queryPresentations`.
+Complete config examples for each chart type. Use these as templates when creating documents with
+`queryPresentations`.
 
-Every `queryPresentation` object requires: `name`, `prefersChart: true`, `visType`, `fields`, `query`, and `config`. The `config` shape varies by chart type — the examples below show the exact structure for each.
+Every `queryPresentation` object requires: `name`, `prefersChart: true`, `visType`, `fields`,
+`query`, and `config`. The `config` shape varies by chart type — the examples below show the exact
+structure for each.
 
 ## Table (Safe Default)
 
@@ -28,6 +31,7 @@ The simplest and most reliable visualization. Use when unsure about chart config
 ```
 
 Key differences from chart types:
+
 - `prefersChart` is `false` (or omitted)
 - `config` is an empty object `{}`
 - `visConfig.chartType` is `"table"`
@@ -291,7 +295,8 @@ Same structure as line chart but with `mark.type: "area"` and `visConfig.chartTy
 
 ## Stacked Bar Chart
 
-Uses `"_stack": "stack"` instead of `"_stack": "group"` in `color`, and `visConfig.chartType: "stackedBarColor"`.
+Uses `"_stack": "stack"` instead of `"_stack": "group"` in `color`, and
+`visConfig.chartType: "stackedBarColor"`.
 
 ```json
 {

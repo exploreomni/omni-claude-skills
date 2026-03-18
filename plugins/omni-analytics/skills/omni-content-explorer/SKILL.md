@@ -23,7 +23,8 @@ curl -L "$OMNI_BASE_URL/openapi.json" \
   -H "Authorization: Bearer $OMNI_API_KEY"
 ```
 
-Use this to verify endpoints, available parameters, and request/response schemas before making calls.
+Use this to verify endpoints, available parameters, and request/response schemas before making
+calls.
 
 ## Browsing Content
 
@@ -82,9 +83,11 @@ curl -L "$OMNI_BASE_URL/api/v1/documents?creatorId={userId}" \
   -H "Authorization: Bearer $OMNI_API_KEY"
 ```
 
-Each document includes: `identifier`, `name`, `type`, `scope`, `owner`, `folder`, `labels`, `updatedAt`, `hasDashboard`.
+Each document includes: `identifier`, `name`, `type`, `scope`, `owner`, `folder`, `labels`,
+`updatedAt`, `hasDashboard`.
 
-> **Important**: Always use the `identifier` field for API calls, not `id`. The `id` field is null for workbook-type documents and will cause silent failures.
+> **Important**: Always use the `identifier` field for API calls, not `id`. The `id` field is null
+> for workbook-type documents and will cause silent failures.
 
 ### Get Document Queries
 
@@ -159,20 +162,28 @@ Formats: `pdf`, `png`
 
 Construct direct links to content:
 
-```
+```text
 Dashboard: {OMNI_BASE_URL}/dashboards/{identifier}
 Workbook:  {OMNI_BASE_URL}/w/{identifier}
 ```
 
-The `identifier` comes from the document's `identifier` field in API responses. Always provide the user a clickable link after finding content.
+The `identifier` comes from the document's `identifier` field in API responses. Always provide the
+user a clickable link after finding content.
 
 ## Search Patterns
 
-When scanning all documents for field references (e.g., for impact analysis), paginate with cursor and call `GET /api/v1/documents/{identifier}/queries` for each document. Launch multiple query-fetch calls in parallel for efficiency. For field impact analysis, prefer the content-validator approach in `omni-model-explorer`.
+When scanning all documents for field references (e.g., for impact analysis), paginate with cursor
+and call `GET /api/v1/documents/{identifier}/queries` for each document. Launch multiple query-fetch
+calls in parallel for efficiency. For field impact analysis, prefer the content-validator approach
+in `omni-model-explorer`.
 
 ## Docs Reference
 
-- [Content API](https://docs.omni.co/api/content.md) · [Documents API](https://docs.omni.co/api/documents.md) · [Folders API](https://docs.omni.co/api/folders.md) · [Labels API](https://docs.omni.co/api/labels.md) · [Dashboard Downloads](https://docs.omni.co/api/dashboard-downloads.md)
+- [Content API](https://docs.omni.co/api/content.md) ·
+  [Documents API](https://docs.omni.co/api/documents.md) ·
+  [Folders API](https://docs.omni.co/api/folders.md) ·
+  [Labels API](https://docs.omni.co/api/labels.md) ·
+  [Dashboard Downloads](https://docs.omni.co/api/dashboard-downloads.md)
 
 ## Related Skills
 

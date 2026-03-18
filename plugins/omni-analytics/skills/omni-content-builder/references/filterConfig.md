@@ -1,6 +1,8 @@
 # filterConfig Reference
 
-Complete filter configuration examples for creating dashboards with pre-configured filters. Include `filterConfig` and `filterOrder` in the `POST /api/v1/documents` body alongside `queryPresentations`.
+Complete filter configuration examples for creating dashboards with pre-configured filters. Include
+`filterConfig` and `filterOrder` in the `POST /api/v1/documents` body alongside
+`queryPresentations`.
 
 ## Structure Overview
 
@@ -50,6 +52,7 @@ Lets the user pick a relative date range (e.g., "last 6 months").
 ### Date range variants
 
 **Last 30 days:**
+
 ```json
 {
   "type": "date",
@@ -63,7 +66,8 @@ Lets the user pick a relative date range (e.g., "last 6 months").
 
 **Last 1 year:**
 
-Note: This will be for the given calendar year, not a rolling 1 year window. For a rolling window, use the last 12 months.
+Note: This will be for the given calendar year, not a rolling 1 year window. For a rolling window,
+use the last 12 months.
 
 ```json
 {
@@ -134,7 +138,8 @@ A simple on/off toggle.
 
 ## Hidden Filter
 
-Any filter type with `"hidden": true`. Applied to queries but not visible in the dashboard UI. Useful for hardcoded filters the user shouldn't change.
+Any filter type with `"hidden": true`. Applied to queries but not visible in the dashboard UI.
+Useful for hardcoded filters the user shouldn't change.
 
 ```json
 {
@@ -214,6 +219,8 @@ Lets the user switch between time granularities (day, week, month, etc.).
 
 ## Tips
 
-- To learn the exact filter structure for a specific use case, create the filter in the Omni UI and read it back with `GET /api/v1/dashboards/{dashboardId}/filters`.
-- `PUT` and `PATCH` on `/dashboards/{id}/filters` may return 405 or 500. Include filters during document creation instead.
+- To learn the exact filter structure for a specific use case, create the filter in the Omni UI and
+  read it back with `GET /api/v1/dashboards/{dashboardId}/filters`.
+- `PUT` and `PATCH` on `/dashboards/{id}/filters` may return 405 or 500. Include filters during
+  document creation instead.
 - Filter IDs are arbitrary strings — use descriptive names for readability.

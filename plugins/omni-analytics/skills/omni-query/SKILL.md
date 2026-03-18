@@ -5,7 +5,8 @@ description: Run queries against Omni Analytics' semantic layer using the REST A
 
 # Omni Query
 
-Run queries against Omni's semantic layer via the REST API. Omni translates field selections into optimized SQL — you specify what you want (dimensions, measures, filters), not how to get it.
+Run queries against Omni's semantic layer via the REST API. Omni translates field selections into
+optimized SQL — you specify what you want (dimensions, measures, filters), not how to get it.
 
 > **Tip**: Use `omni-model-explorer` first if you don't know the available topics and fields.
 
@@ -27,7 +28,8 @@ curl -L "$OMNI_BASE_URL/openapi.json" \
   -H "Authorization: Bearer $OMNI_API_KEY"
 ```
 
-Use this to verify endpoints, available parameters, and request/response schemas before making calls.
+Use this to verify endpoints, available parameters, and request/response schemas before making
+calls.
 
 ## Running a Query
 
@@ -68,7 +70,7 @@ curl -L -X POST "$OMNI_BASE_URL/api/v1/query/run" \
 
 Fields use `view_name.field_name`. Date fields support timeframe brackets:
 
-```
+```text
 users.created_at[date]      — Daily
 users.created_at[week]      — Weekly
 users.created_at[month]     — Monthly
@@ -94,7 +96,10 @@ users.created_at[year]      — Yearly
 }
 ```
 
-Expressions: `"last 90 days"`, `"this quarter"`, `"2024-01-01 to 2024-12-31"`, `"not California"`, `"null"`, `"not null"`, `">100"`, `"between 10 and 100"`, `"contains sales"`, `"starts with A"`. See [references/filter-expressions.md](references/filter-expressions.md) for the complete expression syntax reference.
+Expressions: `"last 90 days"`, `"this quarter"`, `"2024-01-01 to 2024-12-31"`, `"not California"`,
+`"null"`, `"not null"`, `">100"`, `"between 10 and 100"`, `"contains sales"`, `"starts with A"`. See
+[references/filter-expressions.md](references/filter-expressions.md) for the complete expression
+syntax reference.
 
 ### Pivots
 
@@ -110,7 +115,9 @@ Expressions: `"last 90 days"`, `"this quarter"`, `"2024-01-01 to 2024-12-31"`, `
 
 ## Handling Results
 
-Default response: base64-encoded Apache Arrow table. Arrow results are binary — you cannot parse individual row data from the raw response. To verify a query returned data, check `summary.row_count` in the response.
+Default response: base64-encoded Apache Arrow table. Arrow results are binary — you cannot parse
+individual row data from the raw response. To verify a query returned data, check
+`summary.row_count` in the response.
 
 For human-readable results, request CSV instead:
 
@@ -169,23 +176,32 @@ For complex analysis, chain queries:
 
 **Top N**: fields + metric + descending sort + limit
 
-**Aggregation with Breakdown**: multiple dimensions + multiple measures + descending sort by key metric
+**Aggregation with Breakdown**: multiple dimensions + multiple measures + descending sort by key
+metric
 
 ## Known Bugs
 
-- **`IS_NOT_NULL` filter generates `IS NULL`** (reported Omni bug) — workaround: invert the filter logic or use the base view to apply the filter differently.
-- **Boolean filters may be silently dropped** when a `pivots` array is present — if boolean filters aren't applying, remove the pivot and test again.
+- **`IS_NOT_NULL` filter generates `IS NULL`** (reported Omni bug) — workaround: invert the filter
+  logic or use the base view to apply the filter differently.
+- **Boolean filters may be silently dropped** when a `pivots` array is present — if boolean filters
+  aren't applying, remove the pivot and test again.
 
 ## Linking to Results
 
-Queries are ephemeral — there is no persistent URL for a query result. To give the user a shareable link:
+Queries are ephemeral — there is no persistent URL for a query result. To give the user a shareable
+link:
 
-- **For existing dashboards**: `{OMNI_BASE_URL}/dashboards/{identifier}` (the `identifier` comes from the document API response)
-- **For new analysis**: Create a document via `omni-content-builder` with the query as a `queryPresentation`, then share `{OMNI_BASE_URL}/dashboards/{identifier}`
+- **For existing dashboards**: `{OMNI_BASE_URL}/dashboards/{identifier}` (the `identifier` comes
+  from the document API response)
+- **For new analysis**: Create a document via `omni-content-builder` with the query as a
+  `queryPresentation`, then share `{OMNI_BASE_URL}/dashboards/{identifier}`
 
 ## Docs Reference
 
-- [Query API](https://docs.omni.co/api/queries.md) · [Running Document Queries](https://docs.omni.co/guides/run-document-queries.md) · [Querying Documentation](https://docs.omni.co/analyze-explore/querying.md) · [Filter Syntax](https://docs.omni.co/modeling/filters.md)
+- [Query API](https://docs.omni.co/api/queries.md) ·
+  [Running Document Queries](https://docs.omni.co/guides/run-document-queries.md) ·
+  [Querying Documentation](https://docs.omni.co/analyze-explore/querying.md) ·
+  [Filter Syntax](https://docs.omni.co/modeling/filters.md)
 
 ## Related Skills
 
