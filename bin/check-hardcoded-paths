@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+
+from __future__ import annotations
+
+import re
+import sys
+from pathlib import Path
+
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+SCAN_ROOTS = [
+    REPO_ROOT / ".claude-plugin",
+    REPO_ROOT / "plugins",
+]
+PATH_PATTERN = re.compile(r"/(?:Users|home)/")
+
+
+def iter_files() -> list[Path]:
+    files: list[Path] = []
+    for entry in SCAN_ROOTS:
+        if not entry.exists():
+            continue
+        if entry.is_file():
+            files.append(entry)
+            continue
+        files.extend(path for path in entry.rglob("*") if path.is_file())
+    return sorted(files)
+
+
+def main() -> int:
+    violations: list[str] = []
+
+    for path in iter_files():
+        for line_number, line in enumerate(path.read_text(encoding="utf-8", errors="ignore").splitlines(), start=1):
+            if PATH_PATTERN.search(line):
+                relative_path = path.relative_to(REPO_ROOT)
+                violations.append(f"{relative_path}:{line_number}: {line.strip()}")
+
+    if violations:
+        print("hardcoded local paths found:", file=sys.stderr)
+        for violation in violations:
+            print(f"  - {violation}", file=sys.stderr)
+        return 1
+
+    print("no hardcoded local paths found")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

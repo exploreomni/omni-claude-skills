@@ -1,0 +1,68 @@
+#!/usr/bin/env python3
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+SKILL_GLOB = "plugins/*/skills/*/SKILL.md"
+
+
+def parse_frontmatter(path: Path) -> list[str]:
+    text = path.read_text(encoding="utf-8")
+    if not text.startswith("---\n"):
+        return ["missing opening YAML frontmatter delimiter"]
+
+    parts = text.split("\n---\n", 1)
+    if len(parts) != 2:
+        return ["missing closing YAML frontmatter delimiter"]
+
+    frontmatter = parts[0].splitlines()[1:]
+    keys: dict[str, str] = {}
+    errors: list[str] = []
+
+    for line in frontmatter:
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if ":" not in line:
+            errors.append(f"invalid frontmatter line: {line!r}")
+            continue
+        key, value = line.split(":", 1)
+        keys[key.strip()] = value.strip().strip("\"'")
+
+    for field in ("name", "description"):
+        if not keys.get(field):
+            errors.append(f"missing required frontmatter field: {field}")
+
+    return errors
+
+
+def main() -> int:
+    skill_files = sorted(REPO_ROOT.glob(SKILL_GLOB))
+    if not skill_files:
+        print(f"no skill files found matching {SKILL_GLOB}", file=sys.stderr)
+        return 1
+
+    failures: list[str] = []
+    for path in skill_files:
+        errors = parse_frontmatter(path)
+        if errors:
+            relative_path = path.relative_to(REPO_ROOT)
+            for error in errors:
+                failures.append(f"{relative_path}: {error}")
+
+    if failures:
+        print("skill frontmatter validation failed:", file=sys.stderr)
+        for failure in failures:
+            print(f"  - {failure}", file=sys.stderr)
+        return 1
+
+    print(f"validated {len(skill_files)} skill file(s)")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,9 @@
+flavor = "gfm"
+line-length = 100
+respect-gitignore = true
+
+[MD013]
+line-length = 100
+code-blocks = false
+tables = false
+reflow = true

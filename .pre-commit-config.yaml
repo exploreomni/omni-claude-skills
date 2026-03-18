@@ -1,0 +1,37 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-added-large-files
+      - id: check-yaml
+      - id: check-json
+
+  - repo: https://github.com/rvben/rumdl-pre-commit
+    rev: v0.1.54
+    hooks:
+      - id: rumdl-fmt
+
+  - repo: local
+    hooks:
+      - id: validate-skill-frontmatter
+        name: validate skill frontmatter
+        entry: bin/validate-skill-frontmatter
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: validate-plugin-metadata
+        name: validate plugin metadata
+        entry: bin/validate-plugin-metadata
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: check-hardcoded-paths
+        name: check hardcoded paths
+        entry: bin/check-hardcoded-paths
+        language: system
+        pass_filenames: false
+        always_run: true

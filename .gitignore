@@ -1,1 +1,5 @@
 .DS_Store
+.claude/
+__pycache__/
+.rumdl_cache/
+.rumdl-cache/
