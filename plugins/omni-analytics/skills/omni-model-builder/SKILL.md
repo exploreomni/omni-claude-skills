@@ -125,6 +125,8 @@ Write with `mode: "extension"` (shared model layer). To delete a file, send empt
 
 ## Writing Views
 
+> **Every view MUST have a `primary_key: true` dimension.** Without a primary key, queries that join to this view will produce fanout errors or incorrect aggregations. Use the table's natural unique identifier (e.g., `id`, `order_id`, `user_id`). If the table has no single unique column, create a composite key with a SQL expression: `sql: ${schema_name} || '-' || ${table_name}`.
+
 ### Basic View
 
 ```yaml
@@ -213,7 +215,7 @@ Getting `relationship_type` right prevents fanout and symmetric aggregate errors
 
 ## Query Views
 
-Virtual tables defined by a saved query:
+Virtual tables defined by a saved query. Like regular views, query views **must include a `primary_key: true` dimension** to be joinable:
 
 ```yaml
 schema: PUBLIC
@@ -250,6 +252,7 @@ sql: |
 | "No join path from X to Y" | Add a relationship |
 | "Duplicate field name" | Remove duplicate or rename |
 | "Invalid YAML syntax" | Check indentation (2 spaces, no tabs) |
+| Fanout / incorrect aggregations on joins | Add `primary_key: true` to the joined view — every view that participates in a join must have a primary key |
 
 ## Docs Reference
 
