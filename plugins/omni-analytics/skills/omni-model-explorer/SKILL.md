@@ -62,8 +62,7 @@ curl -L "$OMNI_BASE_URL/api/v1/models/{modelId}/topic" \
   -H "Authorization: Bearer $OMNI_API_KEY"
 ```
 
-Returns topic names, base views, labels, and descriptions. The list endpoint uses singular
-`topic` in the path.
+Returns topic names, base views, labels, and descriptions.
 
 ### Step 3: Inspect a Topic
 
