@@ -58,11 +58,12 @@ Each model in the response will include a `branches` array. Each branch has an `
 Topics are entry points for querying. Each topic defines a base view and the set of joined views available.
 
 ```bash
-curl -L "$OMNI_BASE_URL/api/v1/models/{modelId}/topics" \
+curl -L "$OMNI_BASE_URL/api/v1/models/{modelId}/topic" \
   -H "Authorization: Bearer $OMNI_API_KEY"
 ```
 
-Returns topic names, base views, labels, and descriptions.
+Returns topic names, base views, labels, and descriptions. The list endpoint uses singular
+`topic` in the path.
 
 ### Step 3: Inspect a Topic
 
