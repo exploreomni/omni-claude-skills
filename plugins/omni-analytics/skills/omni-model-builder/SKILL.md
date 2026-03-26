@@ -54,71 +54,34 @@ Use dialect-appropriate functions in your SQL (e.g. `SAFE_DIVIDE` for BigQuery, 
 
 ## Schema Refresh: Syncing with Database Changes
 
-The **schema layer** is auto-generated from your database and serves as the source of truth for table and column structure. When your database schema changes, you need to refresh Omni's schema layer to stay in sync.
+The **schema layer** is auto-generated from your database. When your database schema changes (new/deleted/renamed columns, type changes), refresh Omni's schema layer to stay in sync.
 
-### When to Trigger a Schema Refresh
+**When to trigger:**
+- New tables added to your database
+- Column added/renamed/deleted in existing tables
+- Creating a new view from scratch and want auto-generated base dimensions
+- Model is out of sync with database
 
-- **New tables added** to your database that you want to model
-- **Column added/renamed/deleted** in existing tables
-- **Column types changed** in the database (e.g., VARCHAR → NUMERIC)
-- **Creating a new view from scratch** and want Omni to auto-generate base dimensions
-- **Troubleshooting type inference** — if Omni shows `type: UNKNOWN` and you've confirmed the column exists in the database
+**What it does:**
+- Introspects your data warehouse
+- Auto-generates base dimensions for all columns with correct types and timeframes
+- Detects deletions and broken references
+- Runs as a background job (can take several minutes)
 
-### What Schema Refresh Does
+**Side effect:** May auto-generate dimensions for columns you don't need. Suppress with `hidden: true` in your extension layer.
 
-A schema refresh synchronizes your schema layer with the actual database structure:
-
-1. Connects to your data warehouse
-2. Reads table and column metadata
-3. Updates the schema layer with new/changed/deleted objects
-4. Auto-generates base dimensions for each column with correct types (DATE, VARCHAR, NUMERIC, etc.)
-5. Sets up proper `timeframes` for temporal columns (date, week, month, quarter, year)
-
-**Side effects to expect:**
-- Refresh runs as a background job (may take several minutes for large databases)
-- May auto-generate dimensions for columns you don't need to expose — suppress these with `hidden: true` in your extension layer
-- If columns were deleted from the database, schema refresh will detect broken references in your model; use the Content Validator to identify and fix them
-
-### How to Trigger a Schema Refresh
-
-**Via API:**
+**Trigger via API:**
 
 ```bash
-# Standard refresh (adds/updates, doesn't remove deleted objects)
 curl -L -X POST "$OMNI_BASE_URL/api/v1/models/{modelId}/refresh" \
   -H "Authorization: Bearer $OMNI_API_KEY"
 
-# If branch-based schema refresh is enabled, specify the branch:
+# With branch:
 curl -L -X POST "$OMNI_BASE_URL/api/v1/models/{modelId}/refresh?branch_id={branchId}" \
   -H "Authorization: Bearer $OMNI_API_KEY"
 ```
 
-Response: `{ "model_id": "...", "status": "running" }` — the refresh runs in the background.
-
-**Check if refresh is complete:**
-
-```bash
-# Poll the model status
-curl -L "$OMNI_BASE_URL/api/v1/models/{modelId}" \
-  -H "Authorization: Bearer $OMNI_API_KEY" | jq '.model.schema_sync_status'
-```
-
-> **Note**: Schema refresh requires **Connection Admin** or higher permissions.
-
-### Best Practice: Schema Refresh Workflow
-
-When creating a new view from a table:
-
-1. **Create a minimal view stub** or reference to the table
-2. **Trigger schema refresh** to auto-generate base dimensions with correct types
-3. **Review the generated dimensions** — ensure types look correct
-4. **Edit extension layer** to add business logic:
-   - Hide unwanted columns: `hidden: true`
-   - Add measures, filters, custom dimensions
-   - Add descriptions and `ai_context`
-5. **Validate** and go live
-
-This ensures your view has correct type information without manual casting.
+Requires **Connection Admin** permissions.
 
 ## API Discovery
 
@@ -373,30 +336,23 @@ sql: |
 | "Invalid YAML syntax" | Check indentation (2 spaces, no tabs) |
 | Column reference error (e.g., "Column `X` not found") | Check that the table exists and your Omni connection has access |
 
-## Model Out of Sync with Database
+## Troubleshooting: Model Out of Sync with Database
 
-If Omni's model doesn't reflect the current database structure (missing columns, wrong types, broken references, etc.), trigger a schema refresh to re-sync:
-
-```bash
-curl -L -X POST "$OMNI_BASE_URL/api/v1/models/{modelId}/refresh" \
-  -H "Authorization: Bearer $OMNI_API_KEY"
-```
-
-**After the refresh completes**, validate to identify any issues:
+If your model doesn't reflect the database (missing columns, broken references, wrong types), trigger a schema refresh (see "Schema Refresh" section above). Then validate:
 
 ```bash
 curl -L "$OMNI_BASE_URL/api/v1/models/{modelId}/validate" \
   -H "Authorization: Bearer $OMNI_API_KEY"
 ```
 
-Common issues after refresh and how to fix:
+Common issues and fixes:
 
-| Issue | What Happened | Fix |
-|-------|---------------|-----|
-| **Broken column references** | You reference a column that no longer exists in the database | Remove the dimension/measure from your extension layer or update the `sql` to reference a column that exists |
-| **Field name collision** | You defined a measure with the same name as an auto-generated dimension | Suppress the auto-generated dimension with `hidden: true` or rename your measure |
-| **Unknown field types** | Omni still shows `type: UNKNOWN` after refresh | Verify the table and column actually exist in the database and your connection has access to them |
-| **Missing tables** | A table you reference doesn't appear after refresh | Verify the table exists in the database and check that your Omni connection includes the database/schema where it lives |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| **Broken column references** | Column no longer exists in database | Remove or update the `sql` reference |
+| **Field name collision** | Auto-generated dimension conflicts with your measure | Suppress with `hidden: true` or rename |
+| **Unknown field types** | Type info not available from schema | Verify column exists and connection has access |
+| **Missing tables** | Table not in schema after refresh | Verify table exists and connection includes its database/schema |
 
 ## Docs Reference
 
