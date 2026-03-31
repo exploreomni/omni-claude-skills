@@ -5,20 +5,26 @@ A Claude Code plugin that helps analytics engineers and data teams work with [Om
 ## Installation
 
 ### From Marketplace (recommended)
+**Run seperately**
 
 ```bash
 /plugin marketplace add exploreomni/omni-claude-skills
+```
+```bash
 /plugin install omni-analytics@omni-analytics
 ```
 
 ### From Git URL
+**Run seperately**
 
 ```bash
 /plugin marketplace add https://github.com/exploreomni/omni-claude-skills.git
+```
+```bash
 /plugin install omni-analytics@omni-analytics
 ```
 
-### Updating 
+## Updating 
 
 Enable plugin auto-updates:                                                                                                                     
   1. Run /plugin                                                                                                                                                                    
