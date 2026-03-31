@@ -11,6 +11,7 @@ Create, update, and manage Omni documents and dashboards programmatically via th
 
 ## Known Issues & Safe Defaults
 
+- **Always test queries before creating a dashboard** — run each planned query via `POST /api/v1/query/run` first, including the filters you intend to use. This catches bad field names, missing joins, and malformed filter expressions before they become broken tiles.
 - **Chart rendering**: Complex chart types may show "No chart available" in the Omni UI if `config`, `visType`, or `prefersChart` are misconfigured. Default to `chartType: "table"` for reliable rendering, and configure chart visualizations in the Omni UI.
 - **Every query must include at least one measure** — a query with only dimensions produces empty/nonsense tiles (e.g., just months with no data).
 - **Use `identifier` not `id`** for all document API calls — `.id` is null for workbook-type documents and will silently fail.
@@ -369,6 +370,7 @@ curl -L -X POST "$OMNI_BASE_URL/api/v1/documents" \
       "date_filter": {
         "type": "date",
         "label": "Date Range",
+        "fieldName": "order_items.created_at",
         "kind": "TIME_FOR_INTERVAL_DURATION",
         "ui_type": "PAST",
         "left_side": "6 months ago",
@@ -391,15 +393,27 @@ The keys in `filterConfig` (e.g., `"date_filter"`) are arbitrary IDs — they mu
 
 ### Filter Types
 
-**Date Range** — `type: "date"`, `kind: "TIME_FOR_INTERVAL_DURATION"`
+**Date Range (relative)** — `type: "date"`, `kind: "TIME_FOR_INTERVAL_DURATION"`, requires `fieldName`
 
-**String Dropdown** — `type: "string"`, `kind: "EQUALS"`, `values: []`
+**Date Range (absolute)** — `type: "date"`, `kind: "WITHIN_RANGE"`, requires `fieldName`
 
-**Boolean Toggle** — `type: "boolean"`, `is_negative: false`
+**String Dropdown** — `type: "string"`, `kind: "EQUALS"`, requires `fieldName`, `values: []`
+
+**Boolean Toggle** — `type: "boolean"`, requires `fieldName`
 
 **Hidden Filter** — any filter with `"hidden": true` (applied but not visible)
 
-**Date Granularity Picker** — `type: "FIELD_SELECTION"`, `kind: "TIMEFRAME"` with options array
+> **Critical**: Every filter MUST include `fieldName` with the fully qualified field name (e.g., `"order_items.created_at"`). Without it, the filter won't bind to any column. For date filters, do NOT include a timeframe bracket in `fieldName`.
+
+### Controls (separate from filters)
+
+Controls change what fields or granularity tiles display. They go in a `controls` array (NOT in `filterConfig`), but their IDs are included in `filterOrder`.
+
+**Time Frame Switcher** — `type: "FIELD_SELECTION"`, `kind: "TIMEFRAME"` with options array
+
+**Field Switcher** — `type: "FIELD_SELECTION"`, `kind: "FIELD"` with options array
+
+See [references/filterConfig.md](references/filterConfig.md) for complete filter and control examples.
 
 ## URL Patterns
 
@@ -416,10 +430,8 @@ The `identifier` comes from the document's `identifier` field in API responses (
 
 ### API-First (Full Programmatic Creation)
 
-Aim for minimal API calls. Batch everything into the document creation POST.
-
-1. **Discover fields** — use `omni-model-explorer` to find topic + fields (1-2 calls)
-2. **Optionally read a reference dashboard** — `GET /api/v1/documents/{id}` to capture `queryPresentations` patterns (1 call)
+1. **Discover fields** — use `omni-model-explorer` to find topic + fields
+2. **Test each query** — run every query you plan to include via `POST /api/v1/query/run` (using `omni-query`) before building the dashboard. Include the same filters you plan to use in `filterConfig` as query-level filters to confirm they parse correctly. This catches field name typos, missing join paths, bad filter expressions, and permission errors before they become broken tiles.
 3. **Create document** — single `POST /api/v1/documents` with `queryPresentations` + `filterConfig` + `filterOrder` all in one call
 4. **Share the link** — return `{OMNI_BASE_URL}/dashboards/{identifier}` to the user
 5. **Refine in UI** — tile layout, chart styling, and advanced config are best done in the Omni UI
