@@ -11,7 +11,7 @@ Create, update, and manage Omni documents and dashboards programmatically via th
 
 ## Known Issues & Safe Defaults
 
-- **Always test queries before creating a dashboard** — run each planned query via `POST /api/v1/query/run` first, including the filters you intend to use. This catches bad field names, missing joins, and malformed filter expressions before they become broken tiles.
+- **Test every query before creating or updating a dashboard** — the document APIs silently accept broken queries, producing error or empty tiles. Run each query via `POST /api/v1/query/run` (using `omni-query`) and confirm it returns data before proceeding. Include the same filters you plan to use. Fix any failures before creating the dashboard.
 - **Chart rendering**: Complex chart types may show "No chart available" in the Omni UI if `config`, `visType`, or `prefersChart` are misconfigured. Default to `chartType: "table"` for reliable rendering, and configure chart visualizations in the Omni UI.
 - **Every query must include at least one measure** — a query with only dimensions produces empty/nonsense tiles (e.g., just months with no data).
 - **Use `identifier` not `id`** for all document API calls — `.id` is null for workbook-type documents and will silently fail.
@@ -431,7 +431,7 @@ The `identifier` comes from the document's `identifier` field in API responses (
 ### API-First (Full Programmatic Creation)
 
 1. **Discover fields** — use `omni-model-explorer` to find topic + fields
-2. **Test each query** — run every query you plan to include via `POST /api/v1/query/run` (using `omni-query`) before building the dashboard. Include the same filters you plan to use in `filterConfig` as query-level filters to confirm they parse correctly. This catches field name typos, missing join paths, bad filter expressions, and permission errors before they become broken tiles.
+2. **Test each query** — run every planned query via `POST /api/v1/query/run` (using `omni-query`) with the same filters. Confirm each returns data before proceeding.
 3. **Create document** — single `POST /api/v1/documents` with `queryPresentations` + `filterConfig` + `filterOrder` all in one call
 4. **Share the link** — return `{OMNI_BASE_URL}/dashboards/{identifier}` to the user
 5. **Refine in UI** — tile layout, chart styling, and advanced config are best done in the Omni UI
