@@ -1,3 +1,43 @@
+> [!CAUTION]
+> **This repository is deprecated and no longer maintained.**
+> All skills have been consolidated into [`exploreomni/omni-agent-skills`](https://github.com/exploreomni/omni-agent-skills), which supports Claude Code, Cursor, OpenAI Codex, Snowflake Cortex Code, GitHub Copilot, Gemini CLI, and other skills.sh-compatible agents.
+
+## Migrating
+
+Uninstall the old plugin and install the new one:
+
+```bash
+# Remove the old marketplace and plugin
+/plugin uninstall omni-analytics@omni-analytics
+/plugin marketplace remove omni-claude-skills
+
+# Install the new unified plugin
+/plugin marketplace add exploreomni/omni-agent-skills
+/plugin install omni-analytics@omni-analytics
+```
+
+If you use team deployment via `.claude/settings.json`, update the marketplace source:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "omni-analytics": {
+      "source": {
+        "source": "github",
+        "repo": "exploreomni/omni-agent-skills"
+      }
+    }
+  },
+  "enabledPlugins": ["omni-analytics@omni-analytics"]
+}
+```
+
+---
+
+_The original README is preserved below for reference._
+
+---
+
 # Omni Analytics Plugin for Claude Code
 
 A Claude Code plugin that helps analytics engineers and data teams work with [Omni Analytics](https://omni.co) programmatically through Omni's REST APIs.
@@ -31,7 +71,7 @@ Enable plugin auto-updates:
   2. Go to Marketplaces                                                                                                                                                             
   3. Select the marketplace → Enable auto-update
 
-Alternatively, update the plugin manually from the /plugin menu or reinstall it to ensure you’re using the latest version.
+Alternatively, update the plugin manually from the /plugin menu or reinstall it to ensure you're using the latest version.
 
 ## Setup
 
