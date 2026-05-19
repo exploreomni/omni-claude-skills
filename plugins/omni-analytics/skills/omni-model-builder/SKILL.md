@@ -328,6 +328,13 @@ sql: |
   FROM order_items GROUP BY 1
 ```
 
+## Common YAML Pitfalls
+
+- `type:` is **not valid** on measures or dimensions — use `aggregate_type` on measures; dimensions are inferred
+- `avg` → use `average`; `sum_distinct` → use `sum_distinct_on` (with `custom_primary_key_sql`)
+- Date dimensions use `timeframes:` not a type parameter
+- See `references/modelParameters.md` for the full `aggregate_type` list
+
 ## Common Validation Errors
 
 | Error | Fix |
